@@ -6,15 +6,15 @@
 ### Model result and configuration
 Trained model is loaded under model folder as "best_model.pth"  
 
-    __Model Test Accuracy is : 87.1000__
+__Model Test Accuracy is : 87.1000__
 
-    configuration : 
+configuration : 
 
-        - activation function : SiLU
-        - optimizer           : Adam
-        - batch_size          : 128
-        - learning_rate       : 0.001
-        - epochs              : 100
+- activation function : SiLU
+- optimizer           : Adam
+- batch_size          : 128
+- learning_rate       : 0.001
+- epochs              : 100
 
 ***
 #### Evaluation of pretrained model
