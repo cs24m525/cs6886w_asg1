@@ -1,13 +1,14 @@
 # CS6886W - System Engineering for Deep Learning
 ### Assignment 1
+### Name: Manish Kumar Roll No: CS24M525
 
 ***
 ### Model result and configuration
 Trained model is loaded under model folder as "best_model.pth"  
 
-    **Model Test Accuracy is : 87.1000**
+    __Model Test Accuracy is : 87.1000__
 
-    *configuration : 
+    configuration : 
 
         - activation function : SiLU
         - optimizer           : Adam
