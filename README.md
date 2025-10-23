@@ -33,8 +33,7 @@ git clone https://github.com/cs24m525/cs6886w_asg1.git
 ```
 
 Install all the necessary dependencies for project using  
-```python
-pip install -r requirements.txt
+```pip install -r requirements.txt
 ```
 
 
