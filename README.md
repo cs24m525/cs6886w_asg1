@@ -20,7 +20,9 @@ model weights loading and evaluation is in src/eval.py
 model training code is in src/train.py
 
 Clone the repository using
+```
 git clone https://github.com/cs24m525/cs6886w_asg1.git
+```
 
 Install all the necessary dependencies for project using 
 pip install -r requirements.txt
