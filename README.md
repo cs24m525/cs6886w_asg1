@@ -3,11 +3,12 @@
 
 Trained model is loaded under model folder as "best_model.pth"
     Model Test Accuracy is : 87.1000
-    configuration : activation function : SiLU
-                    optimizer           : Adam
-                    batch_size          : 128
-                    learning_rate       : 0.001
-                    epochs              : 100
+    configuration : 
+        activation function : SiLU
+        optimizer           : Adam
+        batch_size          : 128
+        learning_rate       : 0.001
+        epochs              : 100
 
 Execute main.py to run the evaluation of pretrained model on test data.
 
