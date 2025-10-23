@@ -23,7 +23,7 @@ Execute main.py to run the evaluation of pretrained model on test data.
 #### Model Training simulation
 Execute trainmain.py to run the model training simulation.  
 
-    After completion of run it will store the model in "trainmodel/trained_best_model.pth".
+After completion of run it will store the model in "trainmodel/trained_best_model.pth".
 
 ***
 #### Source Codes
