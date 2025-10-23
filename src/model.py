@@ -2,7 +2,6 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import math
-import torch.nn.init as init
 
 def get_activation(name):
     if name.lower() == 'relu':
@@ -70,6 +69,4 @@ def vgg(cfg, num_classes=10, batch_norm=True, activation_name='relu'):
 
 # VGG-6 configuration
 cfg_vgg6 = [64, 64, 'M', 128, 128, 'M']
-
-#model = vgg(cfg_vgg6, num_classes=10, batch_norm=True, activation_name='SiLU')
-#print(model)        
+   

@@ -2,8 +2,6 @@ from src.model import vgg, cfg_vgg6
 from src.utils import GetCifar10
 
 import torch
-import os
-import sys
 
 def eval(model,data):
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')    

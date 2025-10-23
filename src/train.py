@@ -1,10 +1,10 @@
 import torch.optim as optim
 import torch.nn as nn
-import wandb
 import torch
 import os
 from src.utils import GetCifar10
 from src.model import vgg, cfg_vgg6 
+from src.eval import eval
 
 def get_activation(name):
     """Maps an activation function name string to its PyTorch module."""
@@ -15,11 +15,9 @@ def get_activation(name):
     elif name.lower() == 'tanh':
         return nn.Tanh()
     elif name.lower() == 'silu':
-        # SiLU (Sigmoid Linear Unit) is also known as Swish
         return nn.SiLU()
     elif name.lower() == 'gelu':
         return nn.GELU()
-    # Add other activations as needed
     else:
         raise ValueError(f"Unsupported activation function: {name}")
     
@@ -30,10 +28,8 @@ def get_optimizer(model, name, lr):
     name = name.lower()
 
     if name == 'sgd':
-        # Simple SGD
         return optim.SGD(params, lr=lr)
     elif name == 'nesterov-sgd':
-        # SGD with Momentum and Nesterov enabled
         return optim.SGD(params, lr=lr, momentum=0.9, nesterov=True)
     elif name == 'adam':
         return optim.Adam(params, lr=lr)
@@ -47,40 +43,42 @@ def get_optimizer(model, name, lr):
         raise ValueError(f"Unsupported optimizer: {name}")    
     
 
-def run_experiment(config=None):
-    # Initialize W&B run
-    with wandb.init(config=config) as run:
-        # Fetch hyperparameters from W&B config
-        config = run.config
+def train_model(trnconfig):
+        
+        output_directory = 'trainmodel/'
+        os.makedirs(output_directory, exist_ok=True)
 
+        trn_activation = trnconfig['activation']
+        trn_optimizer = trnconfig['optimizer']
+        trn_batchsize = trnconfig['batch_size']
+        trn_learnrate = trnconfig['learning_rate']
+        trn_epochs = trnconfig['epochs']
+        print(trn_activation,trn_optimizer,trn_batchsize,trn_learnrate,trn_epochs)
+        
         # Data Loading
-        # The batch size is now a hyperparameter
-        train_loader, test_loader = GetCifar10(config.batch_size)
+        train_loader, test_loader = GetCifar10(trn_batchsize)
 
         # Device setup
         device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
-        # Model instantiation - dynamic activation
+        # Model instantiation 
         model = vgg(cfg_vgg6,
                       num_classes=10,
                       batch_norm=True,
-                      activation_name=config.activation).to(device)
-
-        # Log model architecture (optional but recommended)
-        wandb.watch(model, log='all')
+                      activation_name=trn_activation).to(device)
 
         # Criterion and dynamic optimizer
         criterion = nn.CrossEntropyLoss()
-        optimizer = get_optimizer(model, config.optimizer, config.learning_rate)
+        optimizer = get_optimizer(model, trn_optimizer, trn_learnrate)
 
         # Training loop
         model.train()
         best_test_acc = 0.0
 
-        # Variable to store the path to the best model checkpoint
-        trained_model_path = ""
+        # Variable to store the path to the best model 
+        best_model_path = ""
 
-        for epoch in range(config.epochs):
+        for epoch in range(trn_epochs):
             running_loss = 0.0
 
             for batch_idx, (data, target) in enumerate(train_loader):
@@ -95,40 +93,15 @@ def run_experiment(config=None):
             train_acc = eval(model, train_loader)
             test_acc = eval(model, test_loader)
 
-            # Log metrics to W&B
-            wandb.log({
-                "epoch": epoch,
-                "train_loss": running_loss / len(train_loader),
-                "train_accuracy": train_acc,
-                "test_accuracy": test_acc
-            })
-
             print(f"Epoch {epoch} - Loss: {running_loss/len(train_loader):.4f}, Train Acc: {train_acc:.2f}, Test Acc: {test_acc:.2f}")
 
-            # Save the model if it's the best one so far
             if test_acc > best_test_acc:
                 best_test_acc = test_acc
 
-                # Define the local path for the model file within the W&B run directory
-                best_model_path = os.path.join(wandb.run.dir, "trained_model.pth")
+                best_model_path = os.path.join(output_directory, "trained_best_model.pth")
 
-                # Save the model state dict (PyTorch standard)
-                torch.save(model.state_dict(), trained_model_path)
+                torch.save(model.state_dict(), best_model_path)
                 print(f"New best model saved at Epoch {epoch} with Test Acc: {best_test_acc:.4f}")
 
 
-        # Log the final best accuracy
-        wandb.log({"best_test_accuracy": best_test_acc})
-
-        if os.path.exists(best_model_path):
-            artifact = wandb.Artifact(
-                name="cifar10-vgg-model",
-                type="model",
-                description="Best trained VGG model on CIFAR-10"
-            )
-            # Add the saved file to the artifact
-            artifact.add_file(best_model_path)
-
-            # Log the artifact to W&B
-            run.log_artifact(artifact)
-            print("Model artifact successfully logged to W&B.")
+        print({"best_test_accuracy": best_test_acc})
