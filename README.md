@@ -1,6 +1,6 @@
 # CS6886W - System Engineering for Deep Learning
 ### Assignment 1
-### Name: Manish Kumar Roll No: CS24M525
+###  Manish Kumar - CS24M525
 
 ***
 ### Model result and configuration
