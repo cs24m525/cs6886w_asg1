@@ -20,20 +20,29 @@ configuration :
 #### Evaluation of pretrained model
 Execute main.py to run the evaluation of pretrained model on test data.
 
-#### Model Training simulation
+#### Model Training simulation and evaluation of newly trained model
 Execute trainmain.py to run the model training simulation.  
 
-After completion of run it will store the model in "trainmodel/trained_best_model.pth".
+After completion of run it will store the model in "trainmodel/trained_best_model.pth". 
+Once model is saved, evaluation of saved model will run with the test data.
 
 ***
 #### Source Codes
-model defenitions is available in src/model.py  
 
-data loading and transformation code is available in src/utils.py  
+        .
+        ├── src/
+        │   ├── model.py                        model defenition
+        │   └── utils.py                        data loading and transformation
+        │   └── eval.py                         model weights loading and evaluation 
+        │   └── train.py                        model training                  
+        ├── model/
+        │   └── best_model.pth                  pretrained model
+        ├── trainmodel/
+        │   └── trained_best_model.pth          after training new trained model will be saved    
+        ├── main.py                             evaluation of pretrained model                             
+        ├── trainmain.py                        model training simulation and evaluation on new trained model
+        └── README.md
 
-model weights loading and evaluation is in src/eval.py  
-
-model training code is in src/train.py  
 ***
 
 #### Clone and dependency
