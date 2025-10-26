@@ -17,11 +17,13 @@ configuration :
 - epochs              : 100
 
 ***
+### Training and Evaluation
+
 #### Evaluation of pretrained model
-Execute main.py to run the evaluation of pretrained model on test data.
+Execute __main.py__ to run the evaluation of pretrained model on test data.
 
 #### Model Training simulation and evaluation of newly trained model
-Execute trainmain.py to run the model training simulation.  
+Execute __trainmain.py__ to run the model training simulation.  
 
 After completion of run it will store the model in "trainmodel/trained_best_model.pth". 
 Once model is saved, evaluation of saved model will run with the test data.
